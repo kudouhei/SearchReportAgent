@@ -36,7 +36,7 @@ class BaseLLM(ABC):
         """
         pass
 
-    def validata_response(self, response: str) -> str:
+    def validate_response(self, response: str) -> str:
         """
         Validate the response from the LLM
         Args:
