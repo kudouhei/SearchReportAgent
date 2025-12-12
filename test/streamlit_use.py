@@ -41,6 +41,9 @@ def main():
         # LLM Provider Selection
         llm_provider = st.selectbox("LLM Provider", ["deepseek", "openai"])
         
+        # Initialize openai_key to avoid NameError
+        openai_key = ""
+        
         if llm_provider == "deepseek":
             model_name = st.selectbox("DeepSeek Model", ["deepseek-chat"])
         else:
@@ -103,7 +106,7 @@ def main():
             return
         
         # Create Agent
-        # 创建配置
+        # Create Configuration
         config = Config(
             deepseek_api_key=deepseek_key if llm_provider == "deepseek" else None,
             openai_api_key=openai_key if llm_provider == "openai" else None,
@@ -117,7 +120,7 @@ def main():
             output_dir="streamlit_reports"
         )
 
-        # 执行研究
+        # Execute Research
         execute_research(query, config)
 
 def execute_research(query: str, config: Config):
@@ -174,7 +177,7 @@ def execute_research(query: str, config: Config):
     except Exception as e:
         st.error(f"Error occurred during research: {str(e)}")
 
-def display_results(agent: DeepSearchAgent, final_report: str):
+def display_results(agent: SearchReportAgent, final_report: str):
     """Display the research results"""
     st.header("Research Results")
     

@@ -54,7 +54,6 @@ class SearchReportAgent:
         """
         Initialize the nodes
         """
-        self.report_structure_node = ReportStructureNode(llm_client=self.llm_client)
         self.first_search_node = FirstSearchNode(llm_client=self.llm_client)
         self.reflection_node = ReflectionNode(llm_client=self.llm_client)
         self.first_summary_node = FirstSummaryNode(llm_client=self.llm_client)
@@ -300,7 +299,7 @@ def create_agent(config_file: Optional[str] = None) -> SearchReportAgent:
         config_file: The path to the configuration file
         
     Returns:
-        DeepSearchAgent instance
+        SearchReportAgent instance
     """
     config = load_config(config_file)
     return SearchReportAgent(config)

@@ -1,14 +1,16 @@
-# config for the search report agent
+# Deep Search Agent Configuration File
+# Please enter your API keys here
 
-DEEPSEEK_API_KEY = ""
+# DeepSeek API Key
+DEEPSEEK_API_KEY = "sk-08e0b032741f461fa1b75caaeab30cea"
 
-# OpenAI API Key
-OPENAI_API_KEY = ""
+# OpenAI API Key (Optional)
+OPENAI_API_KEY = "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"
 
-# Tavily API Key
-TAVILY_API_KEY = ""
+# Tavily Search API Key
+TAVILY_API_KEY = "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"
 
-# config parameters
+# Configuration Parameters
 DEFAULT_LLM_PROVIDER = "deepseek"
 DEEPSEEK_MODEL = "deepseek-chat"
 OPENAI_MODEL = "gpt-4o-mini"
