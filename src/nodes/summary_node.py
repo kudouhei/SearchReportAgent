@@ -208,7 +208,7 @@ class ReflectionSummaryNode(StateMutationNode):
             # 更新状态
             if 0 <= paragraph_index < len(state.paragraphs):
                 state.paragraphs[paragraph_index].research.latest_summary = updated_summary
-                state.paragraphs[paragraph_index].research.increment_reflection()
+                state.paragraphs[paragraph_index].research.increment_reflection_iteration()
                 self.log_info(f"Updated the reflection summary of the paragraph {paragraph_index}")
             else:
                 raise ValueError(f"Paragraph index {paragraph_index} out of range")

@@ -62,7 +62,7 @@ class DeepSeekLLM(BaseLLM):
 
             if response.choices and response.choices[0].message:
                 content = response.choices[0].message.content
-                return self.validata_response(content)
+                return self.validate_response(content)
             else:
                 return ""
         except Exception as e:
