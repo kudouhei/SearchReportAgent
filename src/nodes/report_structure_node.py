@@ -90,11 +90,11 @@ class ReportStructureNode(StateMutationNode):
             self.log_error(f"Failed to process the output: {e}")
             return [
                 {
-                    "title": "Paragraph 1",
+                    "title": "Overview",
                     "content": f"The overall overview and background introduction of '{self.query}'"
                 },
                 {
-                    "title": "Paragraph 2", 
+                    "title": "Detailed Analysis", 
                     "content": f"Deep analysis of the related content of '{self.query}'"
                 }
             ]

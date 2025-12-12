@@ -74,13 +74,32 @@ def main():
 
     with col2:
         st.header("Status Information")
+        # Create empty containers for dynamic updates
+        status_total = st.empty()
+        status_completed = st.empty()
+        status_progress = st.empty()
+        status_info = st.empty()
+        
+        # Store containers in session state for access during execution
+        st.session_state.status_containers = {
+            'total': status_total,
+            'completed': status_completed,
+            'progress': status_progress,
+            'info': status_info
+        }
+        
+        # Update status display
         if 'agent' in st.session_state and hasattr(st.session_state.agent, 'state'):
             progress = st.session_state.agent.get_progress_summary()
-            st.metric("Total Paragraphs", progress['total_paragraphs'])
-            st.metric("Completed", progress['completed_paragraphs'])
-            st.progress(progress['progress_percentage'] / 100)
+            status_total.metric("Total Paragraphs", progress['total_paragraphs'])
+            status_completed.metric("Completed", progress['completed_paragraphs'])
+            status_progress.progress(progress['progress_percentage'] / 100)
+            status_info.empty()
         else:
-            st.info("Not started yet")
+            status_total.empty()
+            status_completed.empty()
+            status_progress.empty()
+            status_info.info("Not started yet")
 
     # Execute 
     col1, col2, col3 = st.columns([1, 1, 1])
@@ -130,16 +149,28 @@ def execute_research(query: str, config: Config):
         progress_bar = st.progress(0)
         status_text = st.empty()
         
+        # Helper function to update status display
+        def update_status_display():
+            if 'agent' in st.session_state and hasattr(st.session_state.agent, 'state'):
+                if 'status_containers' in st.session_state:
+                    progress = st.session_state.agent.get_progress_summary()
+                    st.session_state.status_containers['total'].metric("Total Paragraphs", progress['total_paragraphs'])
+                    st.session_state.status_containers['completed'].metric("Completed", progress['completed_paragraphs'])
+                    st.session_state.status_containers['progress'].progress(progress['progress_percentage'] / 100)
+                    st.session_state.status_containers['info'].empty()
+        
         # Initialize Agent
         status_text.text("Initializing Agent...")
         agent = SearchReportAgent(config)
         st.session_state.agent = agent
+        update_status_display()
         
         progress_bar.progress(10)
         
         # Generate Report Structure
         status_text.text("Generating Report Structure...")
         agent._generate_report_structure(query)
+        update_status_display()
         progress_bar.progress(20)
         
         # Process Paragraphs
@@ -149,12 +180,14 @@ def execute_research(query: str, config: Config):
             
             # Initial Search and Summary
             agent._initial_search_and_summary(i)
+            update_status_display()
             progress_value = 20 + (i + 0.5) / total_paragraphs * 60
             progress_bar.progress(int(progress_value))
             
             # Reflection Loop
             agent._reflection_loop(i)
             agent.state.paragraphs[i].research.mark_completed()
+            update_status_display()
             
             progress_value = 20 + (i + 1) / total_paragraphs * 60
             progress_bar.progress(int(progress_value))
@@ -162,11 +195,13 @@ def execute_research(query: str, config: Config):
         # Generate Final Report
         status_text.text("Generating Final Report...")
         final_report = agent._generate_final_report()
+        update_status_display()
         progress_bar.progress(90)
         
         # Save Report
         status_text.text("Saving Report...")
         agent._save_report(final_report)
+        update_status_display()
         progress_bar.progress(100)
         
         status_text.text("Research completed!")
