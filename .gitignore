@@ -24,4 +24,4 @@ model_cache/
 .DS_Store
 /.DS_Store
 
-config.py
+# config.py
